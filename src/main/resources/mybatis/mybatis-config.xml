@@ -14,6 +14,8 @@
 	<typeAliases>
 		<typeAlias alias="MemberDTO" type="com.ssssong.choonsik.member.dto.MemberDTO"/>
 		<typeAlias alias="ProductDTO" type="com.ssssong.choonsik.product.dto.ProductDTO"/>
+		<typeAlias alias="boardDTO" type="com.ssssong.choonsik.board.dto.BoardDTO"/>
+		<typeAlias alias="SelectCriteria" type="com.ssssong.choonsik.common.paging.SelectCriteria"/>
 <!--		<typeAlias alias="PurchaseDto" type="com.uni.reactpro.purchase.dto.PurchaseDto"/>-->
 <!--		<typeAlias alias="ReviewDto" type="com.uni.reactpro.review.dto.ReviewDto"/>-->
 	</typeAliases>
@@ -21,6 +23,7 @@
 	<mappers>
 		<mapper resource="MemberMapper.xml" />
 		<mapper resource="ProductMapper.xml" />
+		<mapper resource="BoardMapper.xml" />
 <!--		<mapper resource="ReviewMapper.xml" />-->
 <!--		<mapper resource="PurchaseMapper.xml" />-->
 	</mappers>

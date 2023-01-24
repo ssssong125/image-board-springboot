@@ -50,7 +50,7 @@ public class TokenDTO {
 
     @Override
     public String toString() {
-        return "TokenDto{" +
+        return "TokenDTO{" +
                 "grantType='" + grantType + '\'' +
                 ", memberName='" + memberName + '\'' +
                 ", accessToken='" + accessToken + '\'' +

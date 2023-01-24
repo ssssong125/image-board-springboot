@@ -2,7 +2,7 @@ package com.ssssong.choonsik.product.controller;
 
 import com.ssssong.choonsik.common.ResponseDTO;
 import com.ssssong.choonsik.common.paging.Pagenation;
-import com.ssssong.choonsik.common.paging.ResponseDtoWithPaging;
+import com.ssssong.choonsik.common.paging.ResponseDTOWithPaging;
 import com.ssssong.choonsik.common.paging.SelectCriteria;
 import com.ssssong.choonsik.product.dto.ProductDTO;
 import com.ssssong.choonsik.product.service.ProductService;
@@ -34,7 +34,7 @@ public class ProductController {
 
         log.info("[ProductController] selectCriteria : " + selectCriteria);
 
-        ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+        ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
         responseDtoWithPaging.setPageInfo(selectCriteria);
         responseDtoWithPaging.setData(productService.selectProductListWithPaging(selectCriteria));
 
@@ -53,7 +53,7 @@ public class ProductController {
 
         log.info("[ProductController] selectCriteria : " + selectCriteria);
 
-        ResponseDtoWithPaging responseDtoWithPaging = new ResponseDtoWithPaging();
+        ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
         responseDtoWithPaging.setPageInfo(selectCriteria);
         responseDtoWithPaging.setData(productService.selectProductListWithPagingForAdmin(selectCriteria));
 

@@ -19,8 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(ADD_RESOURCE_HANDLER)
                 .addResourceLocations("file://" +ADD_RESOURCE_LOCATION); // 내 컴퓨터 c 드라이브에 프로덕트 이미지 폴더가 생성됨
-
-
     }
 
 }

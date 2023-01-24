@@ -32,24 +32,34 @@ public class AuthService {
     }
 
     @Transactional
-    public MemberDTO signup(MemberDTO memberDto) {
-        log.info("[AuthService] Signup Start ===================================");
-        log.info("[AuthService] MemberRequestDto {}", memberDto);
+    public MemberDTO signup(MemberDTO memberDTO) {
 
-        if(memberMapper.selectByEmail(memberDto.getMemberEmail()) != null) {
+        log.info("[AuthService] Signup Start ===================================");
+        log.info("[AuthService] MemberRequestDTO {}", memberDTO);
+
+        // 아이디 중복 체크
+        if(memberMapper.selectByMemberId(memberDTO.getMemberId()) != null) {
+            log.info("[AuthService] 아이디가 중복됩니다.");
+            throw new DuplicatedUsernameException("아이디가 중복됩니다.");
+        }
+
+        // 이메일 중복 체크
+        if(memberMapper.selectByEmail(memberDTO.getMemberEmail()) != null) {
             log.info("[AuthService] 이메일이 중복됩니다.");
             throw new DuplicatedUsernameException("이메일이 중복됩니다.");
         }
 
         log.info("[AuthService] Member Signup Start ==============================");
-        memberDto.setMemberPassword(passwordEncoder.encode(memberDto.getMemberPassword()));
-        log.info("[AuthService] Member {}", memberDto);
-        int result = memberMapper.insertMember(memberDto);
+        memberDTO.setMemberPassword(passwordEncoder.encode(memberDTO.getMemberPassword()));
+
+        log.info("[AuthService] Member {}", memberDTO);
+
+        int result = memberMapper.insertMember(memberDTO);
         log.info("[AuthService] Member Insert Result {}", result > 0 ? "회원 가입 성공" : "회원 가입 실패");
 
         log.info("[AuthService] Signup End ==============================");
 
-        return memberDto;
+        return memberDTO;
     }
 
 //    @Transactional
@@ -71,27 +81,27 @@ public class AuthService {
 //    }
 
     @Transactional
-    public TokenDTO login(MemberDTO memberDto) {
+    public TokenDTO login(MemberDTO memberDTO) {
         log.info("[AuthService] Login Start ===================================");
-        log.info("[AuthService] {}", memberDto);
+        log.info("[AuthService] {}", memberDTO);
 
         // 1. 아이디 조회
-        MemberDTO member = memberMapper.findByMemberId(memberDto.getMemberId())
+        MemberDTO member = memberMapper.findByMemberId(memberDTO.getMemberId())
                 .orElseThrow(() -> new LoginFailedException("잘못된 아이디 또는 비밀번호입니다"));
 
         // 2. 비밀번호 매칭
-        if (!passwordEncoder.matches(memberDto.getMemberPassword(), member.getMemberPassword())) {
+        if (!passwordEncoder.matches(memberDTO.getMemberPassword(), member.getMemberPassword())) {
             log.info("[AuthService] Password Match Fail!!!!!!!!!!!!");
             throw new LoginFailedException("잘못된 아이디 또는 비밀번호입니다");
         }
 
         // 3. 토큰 발급
-        TokenDTO tokenDto = tokenProvider.generateTokenDto(member);
-        log.info("[AuthService] tokenDto {}", tokenDto);
+        TokenDTO tokenDTO = tokenProvider.generateTokenDto(member);
+        log.info("[AuthService] tokenDto {}", tokenDTO);
 
         log.info("[AuthService] Login End ===================================");
 
-        return tokenDto;
+        return tokenDTO;
     }
 
 }

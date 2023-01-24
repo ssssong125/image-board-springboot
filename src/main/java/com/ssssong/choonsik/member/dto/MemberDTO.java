@@ -10,21 +10,27 @@ public class MemberDTO implements UserDetails {
     private String memberId;
     private String memberPassword;
     private String memberName;
-    private String memberEmail;
     private String memberRole;
+    private String memberEmail;
+    private char memberStatus;
 
     public MemberDTO() {
     }
 
-    public MemberDTO(Long memberCode, String memberId, String memberPassword, String memberName, String memberEmail, String memberRole, Collection<? extends GrantedAuthority> authorities) {
+    public MemberDTO(Long memberCode, String memberId, String memberPassword, String memberName, String memberRole, String memberEmail, char memberStatus, Collection<? extends GrantedAuthority> authorities) {
         this.memberCode = memberCode;
         this.memberId = memberId;
         this.memberPassword = memberPassword;
         this.memberName = memberName;
-        this.memberEmail = memberEmail;
         this.memberRole = memberRole;
+        this.memberEmail = memberEmail;
+        this.memberStatus = memberStatus;
         this.authorities = authorities;
     }
+
+    public char getMemberStatus() {return memberStatus;}
+
+    public void setMemberStatus(char memberStatus) {this.memberStatus = memberStatus;}
 
     public Long getMemberCode() {
         return memberCode;
@@ -77,8 +83,6 @@ public class MemberDTO implements UserDetails {
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
     }
-
-
 
     // 이하 코드는 security 를 위한 용도
     private Collection<? extends GrantedAuthority> authorities;

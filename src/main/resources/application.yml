@@ -3,10 +3,12 @@ server:
 
 spring:
   datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
+#    driver-class-name: oracle.jdbc.OracleDriver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     #url: jdbc:oracle:thin:@43.200.33.166:1522/xe #나중에 할거구
     #url: jdbc:oracle:thin:@192.168.0.24:1522/xe #오라클 도커만들어서 해놓은거임
-    url: jdbc:oracle:thin:@localhost:1521/xe #로컬
+#    url: jdbc:oracle:thin:@localhost:1521/xe #로컬
+    url: jdbc:mysql://localhost:3306/choonsik?serverTimezone=UTC&characterEncoding=UTF-8 #로컬
     username: choonsik
     password: choonsik
   servlet:

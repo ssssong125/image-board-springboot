@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssssong.choonsik.board.dao.BoardMapper">
+    <!--게시글 등록-->
+    <insert id="registPost" parameterType="BoardDTO">
+        INSERT INTO TBL_BOARD
+            VALUES
+            (
+                DEFAULT,
+                #{boardTitle},
+                #{memberId},
+                #{imgUrl},
+                DEFAULT,
+                'Y'
+            )
+    </insert>
+    <!--코드로 게시글 조회-->
+    <select id="selectPostByCode" resultType="BoardDTO">
+        SELECT
+            BOARD_CODE,
+            BOARD_TITLE,
+            MEMBER_ID,
+            IMG_URL,
+            REG_DATE,
+            BOARD_STATUS
+        FROM TBL_BOARD
+        WHERE BOARD_CODE = #{boardCode}
+        AND BOARD_STATUS = 'Y'
+    </select>
+    <!--게시글 수정-->
+    <update id="updatePost" parameterType="BoardDTO">
+        UPDATE TBL_BOARD
+        SET
+            IMG_URL = #{imgUrl},
+            BOARD_TITLE = #{boardTitle}
+        WHERE BOARD_CODE = #{boardCode}
+    </update>
+    <!--게시글 비활성화-->
+    <update id="deletePost" parameterType="long">
+        UPDATE TBL_BOARD
+        SET
+            BOARD_STATUS = 'N'
+        WHERE BOARD_CODE = #{boardCode}
+    </update>
+    <!--게시글 총 갯수-->
+    <select id="selectBoardTotal" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM TBL_BOARD
+        WHERE BOARD_STATUS = 'Y'
+    </select>
+    <!--게시글 조회(페이징 처리)-->
+    <select id="selectBoardListWithPaging" parameterType="SelectCriteria" resultType="BoardDTO">
+        select R1.* FROM(
+                            SELECT *
+                            FROM TBL_BOARD
+                            WHERE BOARD_STATUS = 'Y'
+                            ORDER BY BOARD_CODE DESC
+                        ) R1
+            LIMIT #{endRow, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}
+    </select>
+
+    <!--    <select id="selectBoardListWithPaging" parameterType="SelectCriteria" resultType="BoardDTO">-->
+    <!--        SELECT * FROM TBL_BOARD ORDER BY DESC LIMIT #{endRow}, #{startRow}-->
+    <!--    </select>-->
+
+    <!--    <select id="COMMON_PAGING_HEADER">-->
+<!--        select R1.* FROM(-->
+<!--    </select>-->
+
+<!--    <select id="COMMON_PAGING_TAIL">-->
+<!--        ) R1-->
+<!--	LIMIT #{length, jdbcType=INTEGER} OFFSET #{start, jdbcType=INTEGER}-->
+<!--    </select>-->
+
+<!--    <select id="selectBoardListWithPaging" resultType="BoardDTO">-->
+<!--        <include refid="COMMON_PAGING_HEADER"/>-->
+<!--        SELECT *-->
+<!--        FROM TBL_BOARD-->
+<!--        WHERE BOARD_STATUS = 'Y'-->
+<!--&#45;&#45;         order by boardId asc-->
+<!--        ORDER BY BOARD_CODE DESC-->
+<!--        <include refid="COMMON_PAGING_TAIL"/>-->
+<!--    </select>-->
+
+
+<!--    <select id="selectBoardListWithPaging" parameterType="BoardDTO" resultType="BoardDTO">-->
+<!--    <select id="selectBoardListWithPaging" parameterType="SelectCriteria" resultType="BoardDTO">-->
+<!--        <![CDATA[-->
+<!--        SELECT-->
+<!--            BB.BOARD_CODE,-->
+<!--            BB.BOARD_TITLE,-->
+<!--            BB.MEMBER_ID,-->
+<!--            BB.IMG_URL,-->
+<!--            BB.REG_DATE,-->
+<!--            BB.BOARD_STATUS-->
+<!--        FROM(-->
+<!--                SELECT-->
+<!--                    ROWNUM AS RN,-->
+<!--                    B.BOARD_CODE,-->
+<!--                    B.BOARD_TITLE,-->
+<!--                    B.MEMBER_ID,-->
+<!--                    B.IMG_URL,-->
+<!--                    B.REG_DATE,-->
+<!--                    B.BOARD_STATUS-->
+<!--                FROM (-->
+<!--                         SELECT-->
+<!--                             TB.BOARD_CODE,-->
+<!--                             TB.BOARD_TITLE,-->
+<!--                             TB.MEMBER_ID,-->
+<!--                             TB.IMG_URL,-->
+<!--                             TB.REG_DATE,-->
+<!--                             TB.BOARD_STATUS-->
+<!--                         FROM TBL_BOARD TB-->
+<!--                         WHERE BOARD_STATUS = 'Y'-->
+<!--                         ORDER BY TB.BOARD_CODE DESC-->
+<!--                     ) B-->
+<!--            ) BB-->
+<!--        WHERE RN <= #{ endRow }-->
+<!--          AND RN >= #{ startRow }-->
+<!--        ]]>-->
+<!--    </select>-->
+
+<!--    <select id="selectProduct" resultType="ProductDTO">-->
+<!--        SELECT-->
+<!--               P.PRODUCT_CODE-->
+<!--             , P.PRODUCT_NAME-->
+<!--             , P.PRODUCT_PRICE-->
+<!--             , P.PRODUCT_DESCRIPTION-->
+<!--             , P.PRODUCT_ORDERABLE-->
+<!--             , C.CATEGORY_CODE-->
+<!--             , C.CATEGORY_NAME-->
+<!--             , P.PRODUCT_IMAGE_URL-->
+<!--             , P.PRODUCT_STOCK-->
+<!--        FROM TBL_PRODUCT P-->
+<!--        JOIN TBL_CATEGORY C-->
+<!--          ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--       WHERE PRODUCT_CODE = #{productCode}-->
+<!--         AND PRODUCT_ORDERABLE = 'Y'-->
+<!--        ORDER BY PRODUCT_CODE DESC-->
+<!--    </select>-->
+
+<!--    <select id="selectProductForAdmin" resultType="ProductDTO">-->
+<!--        SELECT-->
+<!--            P.PRODUCT_CODE-->
+<!--             , P.PRODUCT_NAME-->
+<!--             , P.PRODUCT_PRICE-->
+<!--             , P.PRODUCT_DESCRIPTION-->
+<!--             , P.PRODUCT_ORDERABLE-->
+<!--             , C.CATEGORY_CODE-->
+<!--             , C.CATEGORY_NAME-->
+<!--             , P.PRODUCT_IMAGE_URL-->
+<!--             , P.PRODUCT_STOCK-->
+<!--        FROM TBL_PRODUCT P-->
+<!--                 JOIN TBL_CATEGORY C-->
+<!--                      ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--        WHERE PRODUCT_CODE = #{productCode}-->
+<!--        ORDER BY PRODUCT_CODE DESC-->
+<!--    </select>-->
+
+<!--    <select id="selectProductList" resultType="ProductDTO">-->
+<!--        SELECT-->
+<!--               P.PRODUCT_CODE-->
+<!--             , P.PRODUCT_NAME-->
+<!--             , P.PRODUCT_PRICE-->
+<!--             , P.PRODUCT_DESCRIPTION-->
+<!--             , P.PRODUCT_ORDERABLE-->
+<!--             , C.CATEGORY_CODE-->
+<!--             , C.CATEGORY_NAME-->
+<!--             , P.PRODUCT_IMAGE_URL-->
+<!--             , P.PRODUCT_STOCK-->
+<!--          FROM TBL_PRODUCT P-->
+<!--          JOIN TBL_CATEGORY C-->
+<!--            ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--         WHERE PRODUCT_ORDERABLE = 'Y'-->
+<!--         ORDER BY PRODUCT_CODE DESC-->
+<!--    </select>-->
+
+<!--    <select id="selectProductListWithPagingForAdmin" parameterType="ProductDTO" resultType="ProductDTO">-->
+<!--        <![CDATA[-->
+
+<!--        SELECT-->
+<!--               PRODUCT_CODE-->
+<!--             , PRODUCT_NAME-->
+<!--             , PRODUCT_PRICE-->
+<!--             , PRODUCT_DESCRIPTION-->
+<!--             , PRODUCT_ORDERABLE-->
+<!--             , CATEGORY_CODE-->
+<!--             , CATEGORY_NAME-->
+<!--             , PRODUCT_IMAGE_URL-->
+<!--             , PRODUCT_STOCK-->
+<!--        FROM(-->
+<!--                SELECT-->
+<!--                    ROWNUM AS RN-->
+<!--                     , P.PRODUCT_CODE-->
+<!--                     , P.PRODUCT_NAME-->
+<!--                     , P.PRODUCT_PRICE-->
+<!--                     , P.PRODUCT_DESCRIPTION-->
+<!--                     , P.PRODUCT_ORDERABLE-->
+<!--                     , P.CATEGORY_CODE-->
+<!--                     , P.CATEGORY_NAME-->
+<!--                     , P.PRODUCT_IMAGE_URL-->
+<!--                     , P.PRODUCT_STOCK-->
+<!--                FROM (-->
+<!--                         SELECT-->
+<!--                             TP.PRODUCT_CODE-->
+<!--                              , TP.PRODUCT_NAME-->
+<!--                              , TP.PRODUCT_PRICE-->
+<!--                              , TP.PRODUCT_DESCRIPTION-->
+<!--                              , TP.PRODUCT_ORDERABLE-->
+<!--                              , TC.CATEGORY_CODE-->
+<!--                              , TC.CATEGORY_NAME-->
+<!--                              , TP.PRODUCT_IMAGE_URL-->
+<!--                              , TP.PRODUCT_STOCK-->
+<!--                         FROM TBL_PRODUCT TP-->
+<!--                        JOIN TBL_CATEGORY TC ON (TP.CATEGORY_CODE = TC.CATEGORY_CODE)-->
+<!--                        ORDER BY TP.PRODUCT_CODE DESC-->
+<!--                     ) P-->
+
+<!--            )-->
+<!--        WHERE RN <= #{ endRow }-->
+<!--          AND RN >= #{ startRow }-->
+
+<!--        ]]>-->
+<!--    </select>-->
+
+<!--    <select id="selectProductListWithPaging" parameterType="ProductDTO" resultType="ProductDTO">-->
+<!--        <![CDATA[-->
+
+<!--        SELECT-->
+<!--               PRODUCT_CODE-->
+<!--             , PRODUCT_NAME-->
+<!--             , PRODUCT_PRICE-->
+<!--             , PRODUCT_DESCRIPTION-->
+<!--             , PRODUCT_ORDERABLE-->
+<!--             , CATEGORY_CODE-->
+<!--             , CATEGORY_NAME-->
+<!--             , PRODUCT_IMAGE_URL-->
+<!--             , PRODUCT_STOCK-->
+<!--        FROM(-->
+<!--                SELECT-->
+<!--                    ROWNUM AS RN-->
+<!--                     , P.PRODUCT_CODE-->
+<!--                     , P.PRODUCT_NAME-->
+<!--                     , P.PRODUCT_PRICE-->
+<!--                     , P.PRODUCT_DESCRIPTION-->
+<!--                     , P.PRODUCT_ORDERABLE-->
+<!--                     , P.CATEGORY_CODE-->
+<!--                     , P.CATEGORY_NAME-->
+<!--                     , P.PRODUCT_IMAGE_URL-->
+<!--                     , P.PRODUCT_STOCK-->
+<!--                FROM (-->
+<!--                         SELECT-->
+<!--                             TP.PRODUCT_CODE-->
+<!--                              , TP.PRODUCT_NAME-->
+<!--                              , TP.PRODUCT_PRICE-->
+<!--                              , TP.PRODUCT_DESCRIPTION-->
+<!--                              , TP.PRODUCT_ORDERABLE-->
+<!--                              , CP.CATEGORY_CODE-->
+<!--                              , CP.CATEGORY_NAME-->
+<!--                              , TP.PRODUCT_IMAGE_URL-->
+<!--                              , TP.PRODUCT_STOCK-->
+<!--                         FROM TBL_PRODUCT TP-->
+<!--                                  JOIN TBL_CATEGORY CP ON (TP.CATEGORY_CODE = CP.CATEGORY_CODE)-->
+<!--                         WHERE PRODUCT_ORDERABLE = 'Y'-->
+<!--                         ORDER BY TP.PRODUCT_CODE DESC-->
+<!--                     ) P-->
+<!--            )-->
+<!--        WHERE RN <= #{ endRow }-->
+<!--          AND RN >= #{ startRow }-->
+
+<!--        ]]>-->
+<!--    </select>-->
+
+<!--    <select id="selectProductTotal" resultType="int">-->
+<!--        SELECT-->
+<!--            count(*)-->
+<!--        FROM TBL_PRODUCT P-->
+<!--        JOIN TBL_CATEGORY C-->
+<!--          ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--        WHERE PRODUCT_ORDERABLE = 'Y'-->
+<!--    </select>-->
+
+<!--    <select id="selectProductTotalForAdmin" resultType="int">-->
+<!--        SELECT-->
+<!--            count(*)-->
+<!--        FROM TBL_PRODUCT P-->
+<!--        JOIN TBL_CATEGORY C-->
+<!--          ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--    </select>-->
+
+<!--    <select id="selectProductListAboutMeal" resultType="ProductDTO">-->
+<!--        SELECT-->
+<!--            P.PRODUCT_CODE-->
+<!--             , P.PRODUCT_NAME-->
+<!--             , P.PRODUCT_PRICE-->
+<!--             , P.PRODUCT_DESCRIPTION-->
+<!--             , P.PRODUCT_ORDERABLE-->
+<!--             , C.CATEGORY_CODE-->
+<!--             , C.CATEGORY_NAME-->
+<!--             , P.PRODUCT_IMAGE_URL-->
+<!--             , P.PRODUCT_STOCK-->
+<!--        FROM TBL_PRODUCT P-->
+<!--        JOIN TBL_CATEGORY C-->
+<!--          ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--       WHERE CATEGORY_NAME = '식사'-->
+<!--         AND PRODUCT_ORDERABLE = 'Y'-->
+<!--        ORDER BY PRODUCT_CODE DESC-->
+<!--    </select>-->
+
+<!--    <select id="selectProductListAboutDessert" resultType="ProductDTO">-->
+<!--        SELECT-->
+<!--            P.PRODUCT_CODE-->
+<!--             , P.PRODUCT_NAME-->
+<!--             , P.PRODUCT_PRICE-->
+<!--             , P.PRODUCT_DESCRIPTION-->
+<!--             , P.PRODUCT_ORDERABLE-->
+<!--             , C.CATEGORY_CODE-->
+<!--             , C.CATEGORY_NAME-->
+<!--             , P.PRODUCT_IMAGE_URL-->
+<!--             , P.PRODUCT_STOCK-->
+<!--        FROM TBL_PRODUCT P-->
+<!--                 JOIN TBL_CATEGORY C-->
+<!--                      ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--        WHERE CATEGORY_NAME = '디저트'-->
+<!--          AND PRODUCT_ORDERABLE = 'Y'-->
+<!--        ORDER BY PRODUCT_CODE DESC-->
+<!--    </select>-->
+
+<!--    <select id="selectProductListAboutBeverage" resultType="ProductDTO">-->
+<!--        SELECT-->
+<!--               P.PRODUCT_CODE-->
+<!--             , P.PRODUCT_NAME-->
+<!--             , P.PRODUCT_PRICE-->
+<!--             , P.PRODUCT_DESCRIPTION-->
+<!--             , P.PRODUCT_ORDERABLE-->
+<!--             , C.CATEGORY_CODE-->
+<!--             , C.CATEGORY_NAME-->
+<!--             , P.PRODUCT_IMAGE_URL-->
+<!--             , P.PRODUCT_STOCK-->
+<!--        FROM TBL_PRODUCT P-->
+<!--                 JOIN TBL_CATEGORY C-->
+<!--                      ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--        WHERE CATEGORY_NAME = '음료'-->
+<!--          AND PRODUCT_ORDERABLE = 'Y'-->
+<!--        ORDER BY PRODUCT_CODE DESC-->
+<!--    </select>-->
+
+<!--    <select id="productListWithSearchValue" resultType="ProductDTO">-->
+<!--        SELECT-->
+<!--            P.PRODUCT_CODE-->
+<!--             , P.PRODUCT_NAME-->
+<!--             , P.PRODUCT_PRICE-->
+<!--             , P.PRODUCT_DESCRIPTION-->
+<!--             , P.PRODUCT_ORDERABLE-->
+<!--             , C.CATEGORY_CODE-->
+<!--             , C.CATEGORY_NAME-->
+<!--             , P.PRODUCT_IMAGE_URL-->
+<!--             , P.PRODUCT_STOCK-->
+<!--         FROM TBL_PRODUCT P-->
+<!--         JOIN TBL_CATEGORY C-->
+<!--           ON (P.CATEGORY_CODE = C.CATEGORY_CODE)-->
+<!--        WHERE PRODUCT_NAME LIKE '%' || #{search} || '%'-->
+<!--          AND PRODUCT_ORDERABLE = 'Y'-->
+<!--        ORDER BY PRODUCT_CODE DESC-->
+<!--    </select>-->
+
+<!--    <insert id="insertProduct" parameterType="ProductDTO">-->
+<!--        INSERT INTO TBL_PRODUCT-->
+<!--        (-->
+<!--          PRODUCT_CODE-->
+<!--        , PRODUCT_NAME-->
+<!--        , PRODUCT_PRICE-->
+<!--        , PRODUCT_DESCRIPTION-->
+<!--        , PRODUCT_ORDERABLE-->
+<!--        , CATEGORY_CODE-->
+<!--        , PRODUCT_IMAGE_URL-->
+<!--        , PRODUCT_STOCK-->
+<!--        )-->
+<!--        VALUES-->
+<!--        (-->
+<!--          SEQ_PRODUCT_CODE.NEXTVAL-->
+<!--        , #{productName}-->
+<!--        , #{productPrice}-->
+<!--        , #{productDescription}-->
+<!--        , #{productOrderable}-->
+<!--        , #{categoryCode}-->
+<!--        , #{productImageUrl}-->
+<!--        , #{productStock}-->
+<!--        )-->
+<!--    </insert>-->
+
+<!--    <update id="updateProduct" parameterType="ProductDTO">-->
+<!--        UPDATE TBL_PRODUCT-->
+<!--        SET-->
+<!--            PRODUCT_NAME = #{productName},-->
+<!--            PRODUCT_PRICE = #{productPrice},-->
+<!--            PRODUCT_DESCRIPTION = #{productDescription},-->
+<!--            PRODUCT_ORDERABLE = #{productOrderable},-->
+<!--            CATEGORY_CODE = #{categoryCode},-->
+<!--            PRODUCT_IMAGE_URL = #{productImageUrl},-->
+<!--            PRODUCT_STOCK = #{productStock}-->
+<!--        WHERE PRODUCT_CODE = #{productCode}-->
+<!--    </update>-->
+
+</mapper>

@@ -59,7 +59,6 @@ public class SecurityConfig  {
     //@Override
    // protected void configure(HttpSecurity http) throws Exception {
 
-
          // CSRF 설정 Disable
          http.csrf().disable()
                 .formLogin().disable()//Spring Security가 기본적으로 제공하는 formLogin 기능을 사용하지 않겠다는것
@@ -78,15 +77,28 @@ public class SecurityConfig  {
                 .authorizeRequests()// http servletRequest 를 사용하는 요청들에 대한 접근제한을 설정
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/auth/**").permitAll()// 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
-                .antMatchers("/api/v1/products/**").permitAll()// 제품 누구나 접근가능
-                .antMatchers("/api/v1/reviews/**").permitAll()// 리뷰도 누구나 접근가능
+                .antMatchers("/api/v2/board/**").permitAll()// 제품 누구나 접근가능
+//                .antMatchers("/api/v1/products/**").permitAll()// 제품 누구나 접근가능
+//                .antMatchers("/api/v1/reviews/**").permitAll()// 리뷰도 누구나 접근가능
+//                .antMatchers("/api/v1/member/update").hasAnyRole("USER", "ADMIN") // 로그인해야 접근 가능
+                .antMatchers("/api/v1/member/**").hasAnyRole("USER", "ADMIN") // 로그인해야 접근 가능
+                .antMatchers("/api/v1/members/**").hasAnyRole("ADMIN") // 관리자만 접근 가능
+//                .antMatchers("/api/v2/board/**").hasAnyRole("USER", "ADMIN") // 관리자만 접근 가능
+                .antMatchers("/api/v2/board/manage/**").hasAnyRole("ADMIN") // 관리자만 접근 가능
                 .antMatchers("/api/**").hasAnyRole("USER", "ADMIN") // 나머지 API 는 전부 인증 필요
+
+//                .and()
+//                .logoutUrl("/logout") // 로그아웃 처리 URL, default: /logout, 원칙적으로 post 방식만 지원
+//                .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동페이지
+//                .deleteCookies("JSESSIONID", "remember-me") // JSESSIONID = 로그인 토큰, 로그아웃 후 쿠키 삭제
+//                .addLogoutHandler( ...생략... ) // 로그아웃 핸들러
+//                .logoutSuccessHandler( ...생략... ) // 로그아웃 성공 후 핸들러
 
                 .and()
                 .cors()
 
-                 .and()
-                 .apply(new JwtSecurityConfig(tokenProvider));
+                .and()
+                .apply(new JwtSecurityConfig(tokenProvider));
 
        return http.build(); // 여기까지가 기본적인 시큐리티 이제 jwt 추가 할거임
     }

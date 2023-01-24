@@ -20,17 +20,16 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<ResponseDTO> signup(@RequestBody MemberDTO memberDto) {
+    @PostMapping("/regist")
+    public ResponseEntity<ResponseDTO> signup(@RequestBody MemberDTO memberDTO) {
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "회원가입 성공", authService.signup(memberDto)));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "회원가입 성공", authService.signup(memberDTO)));
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> login(@RequestBody MemberDTO memberDto) {
+    public ResponseEntity<ResponseDTO> login(@RequestBody MemberDTO memberDTO) {
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "로그인 성공", authService.login(memberDto)));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "로그인 성공", authService.login(memberDTO)));
     }
 
 }

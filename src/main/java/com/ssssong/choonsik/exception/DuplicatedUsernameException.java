@@ -1,6 +1,7 @@
 package com.ssssong.choonsik.exception;
 
 public class DuplicatedUsernameException extends RuntimeException{
+
     public DuplicatedUsernameException() {
         super();
     }
@@ -16,4 +17,5 @@ public class DuplicatedUsernameException extends RuntimeException{
     public DuplicatedUsernameException(Throwable cause) {
         super(cause);
     }
+
 }

@@ -40,7 +40,6 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes); //secret값을 Base64 Decode해서 key변수에 할당
     }
 
-
     // Authentication 객체(유저)의 권한정보를 이용해서 토큰을 생성
     public TokenDTO generateTokenDto(MemberDTO member) {
         log.info("[TokenProvider] generateTokenDto Start ===================================");
