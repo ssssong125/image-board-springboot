@@ -38,7 +38,7 @@ public class AuthService {
         log.info("[AuthService] MemberRequestDTO {}", memberDTO);
 
         // 아이디 중복 체크
-        if(memberMapper.selectByMemberId(memberDTO.getMemberId()) != null) {
+        if(memberMapper.selectByMemberIdOnSignUp(memberDTO.getMemberId()) != null) {
             log.info("[AuthService] 아이디가 중복됩니다.");
             throw new DuplicatedUsernameException("아이디가 중복됩니다.");
         }
@@ -104,4 +104,20 @@ public class AuthService {
         return tokenDTO;
     }
 
+    public boolean memberWithdrawal(MemberDTO memberDTO) {
+
+        MemberDTO member = memberMapper.selectByMemberId(memberDTO.getMemberId());
+
+        if (member != null) {
+            // 비밀번호 매칭
+            if (!passwordEncoder.matches(memberDTO.getMemberPassword(), member.getMemberPassword())) {
+                log.info("[AuthService] Password Match Fail!!!!!!!!!!!!");
+                throw new LoginFailedException("잘못된 아이디 또는 비밀번호입니다");
+            }
+
+            return memberMapper.memberWithdrawal(member.getMemberCode()) > 0;
+        } else {
+            return false;
+        }
+    }
 }

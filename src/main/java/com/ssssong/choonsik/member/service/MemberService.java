@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -15,8 +14,11 @@ import java.util.List;
 public class MemberService {
     private final MemberMapper memberMapper;
 
-    public MemberService(MemberMapper memberMapper) {
+//    private final PasswordEncoder passwordEncoder;
+
+    public MemberService(MemberMapper memberMapper/*, PasswordEncoder passwordEncoder*/) {
         this.memberMapper = memberMapper;
+//        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -39,10 +41,18 @@ public class MemberService {
 
         return memberMapper.updateMember(member) > 0;
     }
-
-    public boolean memberWithdrawal(long memberCode) {
-
-        return memberMapper.memberWithdrawal(memberCode) > 0;
-    }
+//
+//    public boolean memberWithdrawal(MemberDTO memberDTO) {
+//
+//        // 비밀번호 매칭
+//        if (!passwordEncoder.matches(memberDTO.getMemberPassword(), memberDTO.getMemberPassword())) {
+//            log.info("[AuthService] Password Match Fail!!!!!!!!!!!!");
+//            throw new LoginFailedException("잘못된 아이디 또는 비밀번호입니다");
+//        }
+//
+//        MemberDTO member = memberMapper.selectByMemberId(memberDTO.getMemberId());
+//
+//        return memberMapper.memberWithdrawal(member.getMemberCode()) > 0;
+//    }
 
 }

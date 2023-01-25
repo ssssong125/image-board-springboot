@@ -18,7 +18,8 @@ spring:
       max-request-size: 10MB
   web:
     resources:
-      static-locations: classpath:/productimgs/
+#      static-locations: classpath:/productimgs/
+      static-locations: classpath:/choonsikImgs/
 
 # 이미지 저장할 위치와 응답할 때 이미지 주소 세팅
 image:
@@ -26,16 +27,20 @@ image:
   #add-resource-locations: classpath:/static/productimgs/ #여기서 불러다가 쓸거임?
   #add-resource-handler: /productimgs/**
 
-  add-resource-locations: /productimgs/
-  add-resource-handler: /productimgs/**
+#  add-resource-locations: /productimgs/
+#  add-resource-handler: /productimgs/**
+  add-resource-locations: /choonsikImgs/
+  add-resource-handler: /choonsikImgs/**
 
 
   # ProductService에 세팅
   #image-dir: src/main/resources/static/productimgs/
-  image-dir: /productimgs/
+#  image-dir: /productimgs/
+  image-dir: /choonsikImgs/
   #image-url: http://43.200.33.166:8090/productimgs/
   #image-url: http://192.168.0.24:8090/productimgs/
-  image-url: http://localhost:8090/productimgs/
+#  image-url: http://localhost:8090/productimgs/
+  image-url: http://localhost:8090/choonsikImgs/
 
 # HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용
 # Secret 값은 특정 문자열을 Base64 로 인코딩한 값 사용

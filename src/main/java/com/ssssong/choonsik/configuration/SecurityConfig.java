@@ -51,7 +51,8 @@ public class SecurityConfig  {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .antMatchers("/productimgs/**");
+//                .antMatchers("/productimgs/**");
+                .antMatchers("/choonsikImgs/**");
     }
 
     @Bean
@@ -76,15 +77,19 @@ public class SecurityConfig  {
                 .and()
                 .authorizeRequests()// http servletRequest 를 사용하는 요청들에 대한 접근제한을 설정
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/auth/**").permitAll()// 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
-                .antMatchers("/api/v2/board/**").permitAll()// 제품 누구나 접근가능
+//                .antMatchers("/auth/**").permitAll()// 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
+                .antMatchers("/api/v2/auth/regist").permitAll()// 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
+                .antMatchers("/api/v2/auth/login").permitAll()// 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
 //                .antMatchers("/api/v1/products/**").permitAll()// 제품 누구나 접근가능
 //                .antMatchers("/api/v1/reviews/**").permitAll()// 리뷰도 누구나 접근가능
 //                .antMatchers("/api/v1/member/update").hasAnyRole("USER", "ADMIN") // 로그인해야 접근 가능
+                .antMatchers("/api/v2/auth/member").hasAnyRole("USER") // 회원탈퇴는 로그인해야만 가능
                 .antMatchers("/api/v1/member/**").hasAnyRole("USER", "ADMIN") // 로그인해야 접근 가능
                 .antMatchers("/api/v1/members/**").hasAnyRole("ADMIN") // 관리자만 접근 가능
 //                .antMatchers("/api/v2/board/**").hasAnyRole("USER", "ADMIN") // 관리자만 접근 가능
-                .antMatchers("/api/v2/board/manage/**").hasAnyRole("ADMIN") // 관리자만 접근 가능
+//                .antMatchers("/api/v2/board/management").hasAnyRole("ADMIN") // 관리자만 접근 가능
+                .antMatchers("/api/v2/boards/**").hasAnyRole("USER", "ADMIN")// 게시글 누구나 접근가능
+                .antMatchers("/api/v2/boards/management/**").hasAnyRole("ADMIN") // 관리자만 접근 가능
                 .antMatchers("/api/**").hasAnyRole("USER", "ADMIN") // 나머지 API 는 전부 인증 필요
 
 //                .and()

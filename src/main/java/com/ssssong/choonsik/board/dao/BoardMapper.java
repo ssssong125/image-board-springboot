@@ -2,7 +2,6 @@ package com.ssssong.choonsik.board.dao;
 
 import com.ssssong.choonsik.board.dto.BoardDTO;
 import com.ssssong.choonsik.common.paging.SelectCriteria;
-import com.ssssong.choonsik.product.dto.ProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 public interface BoardMapper {
     int registPost(BoardDTO boardDTO);
 
-    BoardDTO selectPostByCode(String boardCode);
+    BoardDTO selectPostByCode(Object boardCode);
 
     int updatePost(BoardDTO boardDTO);
 
@@ -20,6 +19,8 @@ public interface BoardMapper {
     int selectBoardTotal();
 
     List<BoardDTO> selectBoardListWithPaging(SelectCriteria selectCriteria);
+
+//    BoardDTO selectBoardDetail(long boardCode);
 
 //    ProductDTO selectProduct(String productCode);
 //

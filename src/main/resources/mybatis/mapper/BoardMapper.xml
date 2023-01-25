@@ -43,6 +43,7 @@
         SET
             BOARD_STATUS = 'N'
         WHERE BOARD_CODE = #{boardCode}
+        AND BOARD_STATUS = 'Y'
     </update>
     <!--게시글 총 갯수-->
     <select id="selectBoardTotal" resultType="int">
@@ -53,14 +54,19 @@
     </select>
     <!--게시글 조회(페이징 처리)-->
     <select id="selectBoardListWithPaging" parameterType="SelectCriteria" resultType="BoardDTO">
-        select R1.* FROM(
-                            SELECT *
-                            FROM TBL_BOARD
-                            WHERE BOARD_STATUS = 'Y'
-                            ORDER BY BOARD_CODE DESC
-                        ) R1
-            LIMIT #{endRow, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}
+        SELECT *
+        FROM TBL_BOARD
+        WHERE BOARD_STATUS = 'Y'
+        ORDER BY BOARD_CODE DESC
+        LIMIT #{startRow}, #{limit}
     </select>
+<!--        select R1.* FROM(-->
+<!--                        ) R1-->
+<!--            LIMIT #{limit}, 0-->
+<!--            LIMIT #{limit} OFFSET #{startRow}-->
+<!--            LIMIT #{limit, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}-->
+<!--            LIMIT #{limit, jdbcType=INTEGER} OFFSET #{pageNo, jdbcType=INTEGER}-->
+<!--            LIMIT #{endRow, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}-->
 
     <!--    <select id="selectBoardListWithPaging" parameterType="SelectCriteria" resultType="BoardDTO">-->
     <!--        SELECT * FROM TBL_BOARD ORDER BY DESC LIMIT #{endRow}, #{startRow}-->

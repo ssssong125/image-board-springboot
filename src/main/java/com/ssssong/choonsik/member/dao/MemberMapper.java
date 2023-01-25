@@ -19,6 +19,8 @@ public interface MemberMapper {
 
     MemberDTO selectByMemberId(String memberId);
 
+    MemberDTO selectByMemberIdOnSignUp(String memberId);
+
     int updateMember(MemberDTO member);
 
     int memberWithdrawal(long memberCode);

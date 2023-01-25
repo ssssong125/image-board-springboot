@@ -6,6 +6,8 @@ import com.ssssong.choonsik.common.ResponseDTO;
 import com.ssssong.choonsik.common.paging.Pagenation;
 import com.ssssong.choonsik.common.paging.ResponseDTOWithPaging;
 import com.ssssong.choonsik.common.paging.SelectCriteria;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Api(tags = {"boards"})
 @Slf4j
 @RestController
 @RequestMapping("/api/v2")
@@ -26,8 +29,9 @@ public class BoardController {
         this.boardService = boardService;
     }
 
+    @ApiOperation(value = "게시판 게시글 작성")
     @Transactional
-    @PostMapping(value = "/board/manage/regist", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/boards/management", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 //    @PostMapping(value = "/board/manage/regist", consumes = {"multipart/form-data"})
 //    @PostMapping(value = "/board/manage/regist")
     public ResponseEntity<ResponseDTO> registPost(@RequestPart String boardTitle, @RequestPart String memberId, @RequestPart MultipartFile boardImg) {
@@ -43,8 +47,9 @@ public class BoardController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "게시글 등록됨", boardService.registPost(boardDTO)));
     }
 
+    @ApiOperation(value = "게시판 게시글 수정")
     @Transactional
-    @PutMapping(value = "/board/manage/update", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PutMapping(value = "/boards/management", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResponseDTO> updatePost(@RequestPart long boardCode, @RequestPart String boardTitle, @RequestPart String memberId, @RequestPart MultipartFile boardImg) {
 
         BoardDTO boardDTO = new BoardDTO();
@@ -58,15 +63,30 @@ public class BoardController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "게시글 수정됨", boardService.updatePost(boardDTO)));
     }
 
+    @ApiOperation(value = "게시판 게시글 삭제(비활성화)")
     @Transactional
-    @PutMapping("/board/manage/delete")
-    public ResponseEntity<ResponseDTO> deletePost(@RequestBody BoardDTO boardDTO) {
+//    @PutMapping("/board/manage/delete")
+    @DeleteMapping("/boards/management/{code}")
+//    public ResponseEntity<ResponseDTO> deletePost(@PathVariable long boardCode, @RequestBody BoardDTO boardDTO) {
+    public ResponseEntity<ResponseDTO> deletePost(@PathVariable long code) {
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "게시글 삭제됨", boardService.deletePost(boardDTO.getBoardCode())));
+        if (boardService.deletePost(code)) {
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "게시글 삭제됨", null));
+        } else {
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "존재하지 않는 게시글입니다.", null));
+        }
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "게시글 삭제됨", boardService.deletePost(boardDTO.getBoardCode())));
     }
 
-    @GetMapping("/board/list")
-    public ResponseEntity<ResponseDTO> selectPostListWithPaging(@RequestParam(name = "offset", defaultValue = "1") String offset) {
+    @ApiOperation(value = "게시판 게시글 목록 조회")
+//    @GetMapping("/board/list")
+    @GetMapping(value = {"/boards", "/boards/{offset}"})
+//    public ResponseEntity<ResponseDTO> selectPostListWithPaging(@RequestParam(name = "offset", defaultValue = "1") String offset) {
+    public ResponseEntity<ResponseDTO> selectPostListWithPaging(@PathVariable(required = false) String  offset) {
+
+        if (offset == null) {
+            offset = "1";
+        }
 
         log.info("[ProductController] selectPostListWithPaging : " + offset);
 
@@ -82,7 +102,18 @@ public class BoardController {
 //        responseDtoWithPaging.setData(boardService.selectProductListWithPaging(selectCriteria));
         responseDtoWithPaging.setData(boardService.selectBoardListWithPaging(selectCriteria));
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+        if (totalCount != 0) {
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+        } else {
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회된 게시글이 없습니다.", responseDtoWithPaging));
+        }
+    }
+
+    @ApiOperation(value = "게시판 게시글 상세조회")
+    @GetMapping("boards/detail/{code}")
+    public ResponseEntity<ResponseDTO> selectBoardDetail(@PathVariable long code) {
+        
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "게시글 상세내용 조회 성공", boardService.selectBoardDetail(code)));
     }
 
 //    @GetMapping("/products")

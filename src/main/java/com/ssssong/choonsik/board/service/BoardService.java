@@ -3,8 +3,6 @@ package com.ssssong.choonsik.board.service;
 import com.ssssong.choonsik.board.dao.BoardMapper;
 import com.ssssong.choonsik.board.dto.BoardDTO;
 import com.ssssong.choonsik.common.paging.SelectCriteria;
-import com.ssssong.choonsik.product.dao.ProductMapper;
-import com.ssssong.choonsik.product.dto.ProductDTO;
 import com.ssssong.util.FileUploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -143,8 +141,18 @@ public class BoardService {
         for(int i = 0 ; i < boardList.size() ; i++) {
             boardList.get(i).setBoardImageUrl(IMAGE_URL + boardList.get(i).getBoardImageUrl());
         }
+
         log.info("[BoardService] selectBoardListWithPaging End ===================================");
         return boardList;
+    }
+
+    public BoardDTO selectBoardDetail(long boardCode) {
+
+        BoardDTO boardDTO = boardMapper.selectPostByCode(boardCode);
+
+        boardDTO.setBoardImageUrl(IMAGE_URL + boardDTO.getBoardImageUrl());
+
+        return boardDTO;
     }
 //    public Object selectProductListWithPaging(SelectCriteria selectCriteria) {
 //        log.info("[ProductService] selectProductListWithPaging Start ===================================");

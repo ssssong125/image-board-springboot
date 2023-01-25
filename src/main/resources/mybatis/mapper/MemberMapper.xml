@@ -16,6 +16,19 @@
         FROM TBL_MEMBER
           AND MEMBER_STATUS = 'Y'
     </select>
+    <!--회원가입 아이디 조회-->
+    <select id="selectByMemberIdOnSignUp" parameterType="String" resultType="MemberDTO">
+        SELECT
+            MEMBER_CODE
+             ,  MEMBER_ID
+             ,  MEMBER_PASSWORD
+             ,  MEMBER_NAME
+             ,  MEMBER_ROLE
+             ,  MEMBER_EMAIL
+             ,  MEMBER_STATUS
+        FROM TBL_MEMBER
+        WHERE MEMBER_ID = #{memberId}
+    </select>
     <!--아이디로 멤버 조회-->
     <select id="selectByMemberId" parameterType="String" resultType="MemberDTO">
         SELECT
@@ -68,6 +81,7 @@
              ,  MEMBER_STATUS
         FROM TBL_MEMBER
         WHERE MEMBER_ID = #{memberId}
+          AND MEMBER_STATUS = 'Y'
     </select>
     <!--회원 추가-->
     <insert id="insertMember" parameterType="MemberDTO">
