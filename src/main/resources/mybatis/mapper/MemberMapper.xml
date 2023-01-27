@@ -14,7 +14,7 @@
              ,  MEMBER_EMAIL
              ,  MEMBER_STATUS
         FROM TBL_MEMBER
-          AND MEMBER_STATUS = 'Y'
+        WHERE MEMBER_STATUS = 'Y'
     </select>
     <!--회원가입 아이디 조회-->
     <select id="selectByMemberIdOnSignUp" parameterType="String" resultType="MemberDTO">

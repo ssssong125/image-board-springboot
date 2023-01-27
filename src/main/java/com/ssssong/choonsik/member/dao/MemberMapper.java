@@ -9,13 +9,13 @@ import java.util.Optional;
 @Mapper
 public interface MemberMapper {
 
+    int insertMember(MemberDTO member);
+
     List<MemberDTO> selectAllMembers();
 
     Optional<MemberDTO> findByMemberId(String memberId);
 
     MemberDTO selectByEmail(String email);
-
-    int insertMember(MemberDTO member);
 
     MemberDTO selectByMemberId(String memberId);
 
