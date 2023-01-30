@@ -7,11 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.List;
-
 @Slf4j
 @Service
 public class MemberService {
+
     private final MemberMapper memberMapper;
 
 //    private final PasswordEncoder passwordEncoder;
@@ -32,10 +31,10 @@ public class MemberService {
         return member;
     }
 
-    public List<MemberDTO> selectAllMembers() {
-
-        return memberMapper.selectAllMembers();
-    }
+//    public List<MemberDTO> selectAllMembers() {
+//
+//        return memberMapper.selectAllMembers();
+//    }
 
     public boolean updateMember(MemberDTO member) {
 

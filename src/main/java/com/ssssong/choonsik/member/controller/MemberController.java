@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1")
 public class MemberController {
+
     private final MemberService memberService;
-
     private final PasswordEncoder passwordEncoder;
-
     private final MemberMapper memberMapper;
 
     public MemberController(MemberService memberService, PasswordEncoder passwordEncoder, MemberMapper memberMapper) {

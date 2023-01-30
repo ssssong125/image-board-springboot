@@ -1,16 +1,15 @@
 package com.ssssong.choonsik.member.controller;
 
-import com.ssssong.choonsik.jwt.TokenProvider;
-import com.ssssong.choonsik.member.dao.MemberMapper;
 import com.ssssong.choonsik.member.dto.MemberDTO;
 import com.ssssong.choonsik.member.service.AuthService;
-import com.ssssong.choonsik.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class AuthControllerTest {
@@ -18,49 +17,58 @@ class AuthControllerTest {
     @Autowired
     AuthService authService;
 
+
     @Autowired
-    MemberService memberService;
+    public AuthControllerTest(AuthService authService) {
 
-    private final MemberMapper memberMapper;
-
-    private final PasswordEncoder passwordEncoder;
-
-    private final TokenProvider tokenProvider;
-
-    public AuthControllerTest(MemberMapper memberMapper, PasswordEncoder passwordEncoder, TokenProvider tokenProvider) {
-        this.memberMapper = memberMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
+        this.authService = authService;
     }
 
     @Test
     @Transactional
     @Rollback(false) // 값 들어가는지 확인하기위해 db상에 저장 = rollback 시킴
-    void signup() {
+    void 오쓰컨트롤러_회원가입() {
 
+        // given
         MemberDTO memberDTO = new MemberDTO();
-        memberDTO.setMemberId("test01");
-        memberDTO.setMemberPassword("test01");
+        memberDTO.setMemberId("test03");
+        memberDTO.setMemberPassword("test03");
+        memberDTO.setMemberName("test03");
+        memberDTO.setMemberEmail("lyhxr@example.com");
 
-        authService.signup(memberDTO);
+        // when
+        MemberDTO result = authService.signup(memberDTO);
 
-        System.out.println(memberMapper.selectByMemberId(memberDTO.getMemberId()));
+        // then
+        assertNotNull(result);
     }
 
     @Test
-    void login() {
+    void 오쓰컨트롤러_로그인() {
 
+        // given
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setMemberId("admin");
         memberDTO.setMemberPassword("1234");
 
-        authService.login(memberDTO);
+        // when
+
+        // then
+        assertNotNull(authService.login(memberDTO));
     }
 
     @Test
     void memberWithdrawal() {
 
+        // given
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setMemberId("test03");
+        memberDTO.setMemberPassword("test03");
 
+        // when
+        boolean withdraw = authService.memberWithdrawal(memberDTO);
 
+        // then
+        assertEquals(true, withdraw);
     }
 }
