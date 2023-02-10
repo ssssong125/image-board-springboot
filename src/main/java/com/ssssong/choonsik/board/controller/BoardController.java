@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Api(tags = {"boards"})
 @Slf4j
@@ -34,13 +33,15 @@ public class BoardController {
     @PostMapping(value = "/boards/management", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 //    @PostMapping(value = "/board/manage/regist", consumes = {"multipart/form-data"})
 //    @PostMapping(value = "/board/manage/regist")
-    public ResponseEntity<ResponseDTO> registPost(@RequestPart String boardTitle, @RequestPart String memberId, @RequestPart MultipartFile boardImg) {
+//    public ResponseEntity<ResponseDTO> registPost(@RequestPart String boardTitle, @RequestPart String memberId, @RequestPart MultipartFile boardImg) {
+//    public ResponseEntity<ResponseDTO> registPost(BoardDTO boardDTO) {
+    public ResponseEntity<ResponseDTO> registPost(@ModelAttribute BoardDTO boardDTO) {
 //    public ResponseEntity<ResponseDTO> registPost(@ModelAttribute BoardDTO boardDTO) {
 
-        BoardDTO boardDTO = new BoardDTO();
-        boardDTO.setBoardTitle(boardTitle);
-        boardDTO.setMemberId(memberId);
-        boardDTO.setBoardImage(boardImg);
+//        BoardDTO boardDTO = new BoardDTO();
+//        boardDTO.setBoardTitle(boardTitle);
+//        boardDTO.setMemberId(memberId);
+//        boardDTO.setBoardImage(boardImg);
 
         log.info(boardDTO.toString());
 
@@ -50,13 +51,14 @@ public class BoardController {
     @ApiOperation(value = "게시판 게시글 수정")
     @Transactional
     @PutMapping(value = "/boards/management", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ResponseDTO> updatePost(@RequestPart long boardCode, @RequestPart String boardTitle, @RequestPart String memberId, @RequestPart MultipartFile boardImg) {
+//    public ResponseEntity<ResponseDTO> updatePost(@RequestPart long boardCode, @RequestPart String boardTitle, @RequestPart String memberId, @RequestPart MultipartFile boardImg) {
+    public ResponseEntity<ResponseDTO> updatePost(BoardDTO boardDTO) {
 
-        BoardDTO boardDTO = new BoardDTO();
-        boardDTO.setBoardCode(boardCode);
-        boardDTO.setBoardTitle(boardTitle);
-        boardDTO.setMemberId(memberId);
-        boardDTO.setBoardImage(boardImg);
+//        BoardDTO boardDTO = new BoardDTO();
+//        boardDTO.setBoardCode(boardCode);
+//        boardDTO.setBoardTitle(boardTitle);
+//        boardDTO.setMemberId(memberId);
+//        boardDTO.setBoardImage(boardImg);
 
         log.info(boardDTO.toString());
 
@@ -81,6 +83,7 @@ public class BoardController {
     @ApiOperation(value = "게시판 게시글 목록 조회")
 //    @GetMapping("/board/list")
     @GetMapping(value = {"/boards", "/boards/{offset}"})
+//    @GetMapping(value = {"/boards"})
 //    public ResponseEntity<ResponseDTO> selectPostListWithPaging(@RequestParam(name = "offset", defaultValue = "1") String offset) {
     public ResponseEntity<ResponseDTO> selectPostListWithPaging(@PathVariable(required = false) String  offset) {
 
@@ -91,7 +94,7 @@ public class BoardController {
         log.info("[ProductController] selectPostListWithPaging : " + offset);
 
         int totalCount = boardService.selectBoardTotal();
-        int limit = 6;
+        int limit = 4;
         int buttonAmount = 5;
         SelectCriteria selectCriteria = Pagenation.getSelectCriteria(Integer.parseInt(offset), totalCount, limit, buttonAmount);;
 
@@ -99,7 +102,6 @@ public class BoardController {
 
         ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
         responseDtoWithPaging.setPageInfo(selectCriteria);
-//        responseDtoWithPaging.setData(boardService.selectProductListWithPaging(selectCriteria));
         responseDtoWithPaging.setData(boardService.selectBoardListWithPaging(selectCriteria));
 
         if (totalCount != 0) {
@@ -111,6 +113,7 @@ public class BoardController {
 
     @ApiOperation(value = "게시판 게시글 상세조회")
     @GetMapping("boards/detail/{code}")
+//    @GetMapping("board/{code}")
     public ResponseEntity<ResponseDTO> selectBoardDetail(@PathVariable long code) {
         
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "게시글 상세내용 조회 성공", boardService.selectBoardDetail(code)));

@@ -54,7 +54,6 @@ public class JwtFilter extends OncePerRequestFilter {//OncePerRequestFilter 인�
 
             ApiExceptionDTO errorResponse = new ApiExceptionDTO(HttpStatus.UNAUTHORIZED, e.getMessage());
 
-
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write(convertObjectToJson(errorResponse));
         }
@@ -69,6 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {//OncePerRequestFilter 인�
     }
     // Request Header 에서 토큰 정보를 꺼내오기
     private String resolveToken(HttpServletRequest request) {
+
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         ///Header에서 Bearer 부분 이하로 붙은 token을 파싱한다.
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {

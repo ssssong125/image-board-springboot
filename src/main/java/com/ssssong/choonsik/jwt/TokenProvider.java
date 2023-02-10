@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider {
 
-
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;     //30분       // 30분
+//    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 3;     //30분       // 30분
 
     private final UserDetailsService userDetailsService;
 
@@ -120,7 +120,6 @@ public class TokenProvider {
             log.info("[TokenProvider] JWT 토큰이 잘못되었습니다.");
             throw new TokenException("JWT 토큰이 잘못되었습니다.");
         }
-
     }
 
     private Claims parseClaims(String accessToken) {// 토큰 정보를 꺼내기 위해서
