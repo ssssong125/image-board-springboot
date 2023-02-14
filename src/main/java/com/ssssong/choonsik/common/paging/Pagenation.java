@@ -12,7 +12,14 @@ public class Pagenation {
 
         maxPage = (int) Math.ceil((double) totalCount / limit);
 
-        startPage = (int) (Math.ceil((double) pageNo / buttonAmount) - 1) * buttonAmount + 1;
+//        startPage = (int) (Math.ceil((double) pageNo / buttonAmount) - 1) * buttonAmount + 1;
+//        startPage = (int) Math.ceil(((double)pageNo / buttonAmount * buttonAmount));
+        if(pageNo - 2 < 1) {
+            startPage = 1;
+        } else {
+            startPage = pageNo - 2;
+        }
+//        pageNo - 2 < 1? startPage = 1 : startPage = pageNo - 2;
 
         endPage = startPage + buttonAmount - 1;
 
