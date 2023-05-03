@@ -1,4 +1,4 @@
-# Image Board(React) 
+# Image Board(Springboot) 
 ![image](https://user-images.githubusercontent.com/115364621/235833392-85542d9e-aa64-4d7c-8fc4-46fe8e38cf6f.png)
 
 이미지 게시판 
